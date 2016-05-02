@@ -87,6 +87,10 @@ if [ -n "${UDP_PORT}" ]; then
     sed -i -r -e "/^\[\[udp\]\]/, /^$/ { s/4444/${UDP_PORT}/; }" ${CONFIG_FILE}
 fi
 
+# If join is set to the current container, there is no need to join on this instance, so unset env var.
+if [ "${JOIN}" == "${DOCKERCLOUD_CONTAINER_HOSTNAME}:8088" ]; then
+    unset JOIN
+fi
 
 echo "influxdb configuration: "
 cat ${CONFIG_FILE}
